@@ -1,9 +1,11 @@
 
 require 'httparty'
 require 'json'
+require 'roadmap'
 
 class Kele
   include HTTParty
+  include Roadmap
 
   base_uri "https://www.bloc.io/api/v1/"
 
@@ -42,6 +44,17 @@ class Kele
     #   p availability
     # end
   end
+
+  # moved to module
+  # def get_roadmap(roadmap_id ) # 31
+  #   response = self.class.get(api_endpoint("/roadmaps/#{roadmap_id}"), headers: {"authorization" => @auth_token} )
+  #   roadmap_body = JSON.parse(response.body)
+  # end
+  #
+  # def get_checkpoint(checkpoint_id)
+  #   response = self.class.get(api_endpoint("/checkpoints/#{checkpoint_id}"), headers: {"authorization" => @auth_token} )
+  #   checkpoint_body = JSON.parse(response.body)
+  # end
 
   private
 
