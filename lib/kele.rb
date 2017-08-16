@@ -24,6 +24,15 @@ class Kele
       # puts response.code
   end
 
+  def get_me
+    response = Kele.get(api_endpoint("/users/me"), headers: {"authorization" => @auth_token} )
+    user = JSON.parse(response.body)
+
+    # user.each do |key, val|
+    #   p "#{key} : #{val}"
+    # end
+  end
+
   private
 
   def api_endpoint(end_point)
