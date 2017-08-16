@@ -33,6 +33,16 @@ class Kele
     # end
   end
 
+  def get_mentor_availability(mentor_id) #1994246
+    response = self.class.get(api_endpoint("/mentors/#{mentor_id}/student_availability"), headers: {"authorization" => @auth_token} )
+    mentor_availability = JSON.parse(response.body)
+
+    # puts "================================="
+    # mentor_availability.each do |availability|
+    #   p availability
+    # end
+  end
+
   private
 
   def api_endpoint(end_point)
