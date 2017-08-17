@@ -39,11 +39,15 @@ class Kele
     response = self.class.get(api_endpoint("/mentors/#{mentor_id}/student_availability"), headers: {"authorization" => @auth_token} )
     mentor_availability = JSON.parse(response.body)
 
-    # puts "================================="
-    # mentor_availability.each do |availability|
-    #   p availability
-    # end
-  end
+    array = []
+    mentor_availability.each do |a|
+      a.each do |k,v|
+        array << k
+        array << v
+      end
+    end
+    return array
+   end
 
   # moved to module
   # def get_roadmap(roadmap_id ) # 31
@@ -55,6 +59,53 @@ class Kele
   #   response = self.class.get(api_endpoint("/checkpoints/#{checkpoint_id}"), headers: {"authorization" => @auth_token} )
   #   checkpoint_body = JSON.parse(response.body)
   # end
+
+  def get_messages(*page) # passing an array w/ the splat operator
+    if page == [] # if array is empty do this
+      response = Kele.get(
+        api_endpoint("/message_threads"),
+        headers: { "authorization" => @auth_token }
+      )
+    else
+      response = Kele.get(
+        api_endpoint("/message_threads?page=#{page[0]}"),   # array is not empty select the first element
+        # below are OK; it's basically passing the first element in the array w/c is same as page[0]
+        # api_endpoint("/message_threads?page=#{page.first}"),
+        # api_endpoint("/message_threads?page=#{page.last}"),
+        headers: { "authorization" => @auth_token }
+      )
+    end
+      messages = JSON.parse(response.body)
+      #response.code
+  end
+  # self.class   same as   Kele (the name of the module or class)
+
+  def create_message(sender_email, recipient_id, token, message_subject, message_body)
+    response = Kele.post(api_endpoint("messages"), headers: { "authorization" => @auth_token },
+      #query: {
+      body: {
+        "sender": sender_email,
+        "recipient_id": recipient_id,
+        "token": token,
+        "subject": message_subject,
+        "stripped": message_body
+      })
+      #response.code
+  end
+
+
+  def create_submissions(checkpoint_id, assignment_branch, assignment_commit_link, comment, student_enrollment_id)
+    response = self.class.post(base_api_endpoint("messages"), headers: { "authorization" => @auth_token },
+    body: {
+      "assignment_branch": assignment_branch, #"assignment-22-iterative-search",
+      "assignment_commit_link": assignment_commit_link, # "https":/github.com/me/repo/commit/5",
+      "checkpoint_id": checkpoint_id, # 1635,
+      "comment": comment, # "this is my work",
+      "enrollment_id": student_enrollment_id  # 11218,  28114
+      })
+      # response.code
+  end
+
 
   private
 
