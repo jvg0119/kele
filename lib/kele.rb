@@ -86,7 +86,25 @@ class Kele
       #response.code
   end
 
+  def create_submissions(checkpoint_id, assignment_branch, assignment_commit_link, comment, student_enrollment_id)
+  response = self.class.post(api_endpoint("checkpoint_submissions"), headers: { "authorization" => @auth_token },
+  query: {
+    "assignment_branch": assignment_branch, #"assignment-22-iterative-search",
+    "assignment_commit_link": assignment_commit_link, # "https":/github.com/me/repo/commit/5",
+    "checkpoint_id": checkpoint_id, # 1635,
+    "comment": comment, # "this is my work",
+    "enrollment_id": student_enrollment_id  # 11218,  28114
+    })
+    # response.code
 
+end
+
+# this worked
+# "assignment_branch": "assignment-46-pirvate-topics",
+# "assignment_commit_link": "https://github.com/jvg0119/bloccit_iv/tree/assign-46-private-topics",
+# "checkpoint_id": 1657,
+# "comment": "this is my comment work",
+# "enrollment_id": joseph-garcia # ?? works w/o it
 
   private
 
