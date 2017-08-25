@@ -1,4 +1,6 @@
 
+require 'httparty'
+
 module Roadmap
 
   def get_roadmap(roadmap_id ) # id for the Rails roadmaps is 31, 40 "Full Stack Track"

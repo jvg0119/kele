@@ -11,19 +11,12 @@ class Kele
 
   def initialize(email, password)
     response = self.class.post(api_endpoint("sessions"), body: {"email": email, "password": password} )
-
     if (response.code == 200) && response['auth_token']
       puts "All good!"
     else
       puts "Email or password was incorrect"
     end
-
     @auth_token = response['auth_token']
-
-      # puts response.code
-      # puts response.message
-      # puts response.body
-      # puts response.code
   end
 
   def get_me
@@ -82,29 +75,17 @@ class Kele
 
   def create_message(sender_email, recipient_id, token, message_subject, message_body)
     response = Kele.post(api_endpoint("messages"), headers: { "authorization" => @auth_token },
-      #query: {
-      body: {
-        "sender": sender_email,
-        "recipient_id": recipient_id,
-        "token": token,
-        "subject": message_subject,
-        "stripped": message_body
+      #body {
+      query: {
+        sender: sender_email,
+        recipient_id: recipient_id,
+        token: token,
+        subject: message_subject,
+        "stripped-text": message_body
       })
       #response.code
   end
 
-
-  def create_submissions(checkpoint_id, assignment_branch, assignment_commit_link, comment, student_enrollment_id)
-    response = self.class.post(base_api_endpoint("messages"), headers: { "authorization" => @auth_token },
-    body: {
-      "assignment_branch": assignment_branch, #"assignment-22-iterative-search",
-      "assignment_commit_link": assignment_commit_link, # "https":/github.com/me/repo/commit/5",
-      "checkpoint_id": checkpoint_id, # 1635,
-      "comment": comment, # "this is my work",
-      "enrollment_id": student_enrollment_id  # 11218,  28114
-      })
-      # response.code
-  end
 
 
   private
