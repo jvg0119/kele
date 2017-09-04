@@ -73,16 +73,51 @@ class Kele
   end
   # self.class   same as   Kele (the name of the module or class)
 
-  def create_message(sender_email, recipient_id, token, message_subject, message_body)
-    response = Kele.post(api_endpoint("messages"), headers: { "authorization" => @auth_token },
-      #body {
-      query: {
-        sender: sender_email,
-        recipient_id: recipient_id,
-        token: token,
-        subject: message_subject,
-        "stripped-text": message_body
-      })
+
+  # def create_message(sender_email, recipient_id, token, message_subject, message_body)
+  #   response = Kele.post(api_endpoint("messages"), headers: { "authorization" => @auth_token },
+  #     #body: {
+  #     query: {
+  #       sender: sender_email,
+  #       recipient_id: recipient_id,
+  #       token: token,
+  #       subject: message_subject,
+  #       "stripped-text": message_body
+  #     })
+  #     #response.code
+  # end
+
+  # def create_message2(sender_email, recipient_id, message_subject, message_body)
+  #   response = Kele.post(api_endpoint("messages"), headers: { "authorization" => @auth_token },
+  #     body: {
+  #     #query: {
+  #       sender: sender_email,
+  #       recipient_id: recipient_id,
+  #       #token: token,
+  #       subject: message_subject,
+  #       "stripped-text": message_body
+  #     })
+  #     #response.code
+  # end
+
+  def create_message(sender_email, recipient_id, token=nil, message_subject, message_body)
+    if token
+        options = {
+          sender: sender_email,
+          recipient_id: recipient_id,
+          token: token,
+          subject: message_subject,
+          "stripped-text": message_body
+        }
+    else
+      options = {
+          sender: sender_email,
+          recipient_id: recipient_id,
+          subject: message_subject,
+          "stripped-text": message_body
+        }
+    end
+    response = Kele.post(api_endpoint("messages"), headers: { "authorization" => @auth_token }, query: options )
       #response.code
   end
 
@@ -95,8 +130,7 @@ class Kele
     "comment": comment, # "this is my work",
     "enrollment_id": student_enrollment_id  # 11218,  28114
     })
-    # response.code
-
+     response.code
 end
 
 # this worked
@@ -104,7 +138,7 @@ end
 # "assignment_commit_link": "https://github.com/jvg0119/bloccit_iv/tree/assign-46-private-topics",
 # "checkpoint_id": 1657,
 # "comment": "this is my comment work",
-# "enrollment_id": joseph-garcia # ?? works w/o it
+# "enrollment_id": 28114 #    this is my id:
 
   private
 
